@@ -2,6 +2,7 @@ import openpyxl as op
 from copy import copy
 import re
 wb= op.load_workbook(r'C:\Users\RANA\Desktop\PFA\Quantum-II-MIM-IA_Final.xlsx')
+Inbound=wb.get_sheet_by_name('Outbound')
 Outbound=wb.get_sheet_by_name('Outbound')
 Index=wb.get_sheet_by_name('Index')
 Vendor_sub=[]
@@ -32,6 +33,16 @@ def PC_FILEID(job):
     Fid=Fid.replace('0);','')
     return Fid
 
+def edit_Inbound(j):
+    mcol=Inbound.max_column
+    for i in range(1,Inbound.max_row+1):
+        Inbound.cell(row=i,column=mcol+1).value=Inbound.cell(row=i,column=mcol).value
+        Inbound.cell(row=i,column=mcol+1)._style=copy(Inbound.cell(row=i,column=mcol)._style)
+        if i==2:
+            rep2ndrow(i,mcol,j.rstrip())
+        elif i==4:
+            Inbound.cell(row=i,column=mcol+1).value=j
+
 def edit_Outbound(j):
     mcol=Outbound.max_column
     for i in range(1,Outbound.max_row+1):
@@ -61,6 +72,7 @@ def edit_index(j):
 
 with open(r"C:\Users\RANA\Desktop\PFA\R1 Jobs1.txt","r") as obj:
     for j in obj:
+        edit_Inbound(j.rstrip())
         edit_Outbound(j.rstrip())
         edit_index(j.rstrip())
 
